@@ -1,0 +1,16 @@
+FROM golang:1.18-alpine
+
+WORKDIR /app
+
+COPY go.mod ./
+COPY go.sum ./
+RUN go mod download
+
+COPY cmd/user/ ./cmd/user/
+COPY pkg/user/ ./pkg/user/
+
+RUN go build -o user_srv /app/cmd/user/user_srv.go
+
+EXPOSE "8080"
+
+CMD [ "./user_srv" ]

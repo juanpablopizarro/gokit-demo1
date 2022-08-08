@@ -1,0 +1,16 @@
+FROM golang:1.18-alpine
+
+WORKDIR /app
+
+COPY go.mod ./
+COPY go.sum ./
+RUN go mod download
+
+COPY cmd/password/ ./cmd/password/
+COPY pkg/password/ ./pkg/password/
+
+RUN go build -o pass_srv /app/cmd/password/pass_srv.go 
+
+EXPOSE "8081"
+
+CMD [ "./pass_srv" ]
